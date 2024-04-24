@@ -2,7 +2,7 @@
 class Configurations():
     def __init__(self):
         self.__file_output = './file/estoque.csv'
-        self.__file_output_txt = './file/logEstoque.csv'
+        self.__file_output_txt = './file/logEstoque.txt'
 
     @property
     def file_output(self):

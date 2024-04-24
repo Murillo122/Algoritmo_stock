@@ -40,4 +40,7 @@ class Utils():
             for transaction in transactions:
                 writer.writerow(transaction)
 
-
+    def add_transaction(self, id, add_codigo, add_descricao, add_quantidade):
+        with open (self.__configurations.file_output, mode='a', newline='') as file:
+            writer = csv.writer(file, delimiter=';')
+            writer.writerow([id, add_codigo, add_descricao, add_quantidade])

@@ -23,7 +23,14 @@ if __name__ == '__main__':
 
                 transaction = Transaction()
                 transaction.update(id, codigo, descricao, quantidade)
-            
+            elif operation == 4:
+                id = int(input('Digite o id: '))
+                codigo = input('Digite o codigo: ')
+                descricao = input('Digite a descricao: ')
+                quantidade = int(input('Digite o quantidade: '))
+
+                transaction = Transaction()
+                transaction.add(id, codigo, descricao, quantidade)  
             print(f'operacao escolhida ${operation}')
             
 
