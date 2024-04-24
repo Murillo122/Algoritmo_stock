@@ -17,3 +17,6 @@ class Transaction():
 
     def update(self, id, new_codigo, new_descricao, new_quantidade):
         self.__utils.update_transaction(id, new_codigo, new_descricao, new_quantidade)
+
+    def add(self, id, add_codigo, add_descricao, add_quantidade):
+        self.__utils.add_transaction(id, add_codigo, add_descricao, add_quantidade)
