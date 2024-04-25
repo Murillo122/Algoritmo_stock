@@ -20,3 +20,6 @@ class Transaction():
 
     def add(self, id, add_codigo, add_descricao, add_quantidade):
         self.__utils.add_transaction(id, add_codigo, add_descricao, add_quantidade)
+    
+    def remove(self, id):
+        self.__utils.remove_transaction(id)

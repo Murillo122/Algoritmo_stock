@@ -44,3 +44,18 @@ class Utils():
         with open (self.__configurations.file_output, mode='a', newline='') as file:
             writer = csv.writer(file, delimiter=';')
             writer.writerow([id, add_codigo, add_descricao, add_quantidade])
+    
+    def remove_transaction(self, id):
+        transactions = self.read_file_csv()
+        updated_transactions = [transaction for transaction in transactions if transaction['id'] != str(id)]
+        if len(updated_transactions) == len(transactions):
+            print("ID inválido. Não foi possível encontrar o ID fornecido.")
+            return
+
+        with open(self.__configurations.file_output, mode='w', newline='') as file:
+            writer = csv.writer(file, delimiter=';')
+            writer.writerow(['id', 'codigo', 'descricao', 'quantidade'])  # cabecalho
+            for transaction in updated_transactions:
+                writer.writerow([transaction['id'], transaction['codigo'], transaction['descricao'], transaction['quantidade']])
+
+        print(f"Removendo o produto com ID {id} com sucesso.")

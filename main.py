@@ -3,6 +3,7 @@ from models.transaction import Transaction
 
 if __name__ == '__main__':
     menu = Menu()
+    transaction = Transaction()
 
     while True:
         
@@ -21,7 +22,6 @@ if __name__ == '__main__':
                 descricao = input('Digite a descricao: ')
                 quantidade = int(input('Digite o quantidade: '))
 
-                transaction = Transaction()
                 transaction.update(id, codigo, descricao, quantidade)
             elif operation == 4:
                 id = int(input('Digite o id: '))
@@ -29,8 +29,11 @@ if __name__ == '__main__':
                 descricao = input('Digite a descricao: ')
                 quantidade = int(input('Digite o quantidade: '))
 
-                transaction = Transaction()
                 transaction.add(id, codigo, descricao, quantidade)  
+            elif operation == 5:
+                id = int(input('Digite o id: '))
+
+                transaction.remove(id)  
             print(f'operacao escolhida ${operation}')
             
 
