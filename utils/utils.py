@@ -178,6 +178,7 @@ class Utils():
                 logs.to_csv(self.__configurations.log_output, index=False)
         else:
             print(f"ID {id} não encontrado.")
+            
 
 
 

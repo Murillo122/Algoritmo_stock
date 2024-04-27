@@ -38,7 +38,6 @@ class Transaction():
         for ind, row in log.iterrows():
             print(f"{row['Data']:<10}| {row['Ação']:<12}| {row['Item Alterado']}")
 
-
     def adicionar_quantidade(self, id, quantidade):
         self.__utils.add_quantity_by_id(id, quantidade)
     
