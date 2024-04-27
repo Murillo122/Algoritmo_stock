@@ -10,7 +10,9 @@ class Menu:
         print('Digite 3 para alterar um valor de um dos produtos no estoque') 
         print('Digite 4 para adicionar um produto no estoque')
         print('Digite 5 para remover um produto no estoque')
-        print('Digite 6 para sair')
+        print('Digite 6 para adicionar uma quantidade para o produto no estoque')
+        print('Digite 7 para remover uma quantidade para o produto no estoque')
+        print('Digite 8 para sair')
 
     def get_operation(self):
         self.__operation = int(input('selecione uma operação: '))

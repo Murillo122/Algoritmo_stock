@@ -1,55 +1,60 @@
 from pages.menu import Menu
-from utils.utils import Utils
 from models.transaction import Transaction
 
-
 if __name__ == '__main__':
-    utils = Utils()
     menu = Menu()
     transaction = Transaction()
-    
-    #utils.write_log_csv()   
+    transaction.show_critical()
     
     while True:
-        print('Itens com estoque crítico:')
-        utils.show_critical_positions()
-
         menu.show_menu()
         operation = menu.get_operation()
         menu.limpar_terminal()
 
-        if operation == 6:
+        if operation == 8:
             print('Saindo do sistema ...')
             break
 
-        elif operation == 1:
-            Transaction().view()
+        elif operation == 1: # ver o estoque
+            transaction.view()
 
-        elif operation == 2:
-            log = utils.read_log_csv()
-            print(log)
-            
-        elif operation == 3:
+        elif operation == 2: # log de Movimentação
+            transaction.show_log()
+   
+        elif operation == 3: # alterar valor
             id = int(input('Digite o id: '))
             codigo = input('Digite o codigo: ')
             descricao = input('Digite a descricao: ')
             quantidade = int(input('Digite o quantidade: '))
+            minimo = int(input('Digite o minimo: '))
 
-            transaction.update(id, codigo, descricao, quantidade)
+            transaction.update(id, codigo, descricao, quantidade, minimo)
 
-        elif operation == 4:
+        elif operation == 4: # adicionar produto
             id = int(input('Digite o id: '))
             codigo = input('Digite o codigo: ')
             descricao = input('Digite a descricao: ')
             quantidade = int(input('Digite o quantidade: '))
+            minimo = int(input('Digite o minimo: '))
 
-            transaction.add(id, codigo, descricao, quantidade)
+            transaction.add(id, codigo, descricao, quantidade, minimo)
              
-        elif operation == 5:
+        elif operation == 5: #remover produto
             id = int(input('Digite o id: '))
-            #quantidade = int(input('Digite a quantidade a ser removida: '))
 
-            transaction.remove(id)  
+            transaction.remove(id)
+        
+        elif operation == 6: #adicionar quantidade
+            id = int(input('Digite o id: '))
+            quantidade = int(input('Digite a quantidade: '))
+
+            transaction.adicionar_quantidade(id, quantidade)
+        
+        elif operation == 7: #retirar quantidade
+            id = int(input('Digite o id: '))
+            quantidade = int(input('Digite a quantidade: '))
+
+            transaction.remove_quantidade(id, quantidade)
 
         print(f'operacao escolhida ${operation}')
             
