@@ -12,9 +12,10 @@ class Transaction():
         self.__utils.write_file_csv(self.__id, self.__codigo, self.__descricao, self.__quantidade)
     
     def view(self):
-        for transaction in self.__utils.read_file_csv():
-            print(f"id: {transaction['id']}, codigo: {transaction['codigo']}, descricao: {transaction['descricao']}, quantidade: {transaction['quantidade']}")
-
+        transactions = self.__utils.read_file_csv()
+        for ind, row in transactions.iterrows():
+            print(f'id: {row[0]}, codigo: {row[1]}, descricao: {row[2]}, quantidade: {row[3]}')
+        
     def update(self, id, new_codigo, new_descricao, new_quantidade):
         self.__utils.update_transaction(id, new_codigo, new_descricao, new_quantidade)
 

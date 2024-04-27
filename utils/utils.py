@@ -1,61 +1,116 @@
-import csv
-from configurations.configurations import Configurations
+import pandas as pd
 from datetime import date
+from configurations.configurations import Configurations
 
 class Utils():
     def __init__(self):
         self.__configurations = Configurations()
 
+
     def read_file_csv(self):
-        transactions = []
-        with open(self.__configurations.file_output, mode='r', newline='') as file:
-            reader = csv.DictReader(file, delimiter=';')
-            for row in reader:
-                transactions.append(row)
-        return transactions
+        self.transactions = pd.read_csv(self.__configurations.file_output)
+        self.transactions = self.transactions.sort_values('id')
+        return self.transactions
     
-    def write_file_csv(self, id, codigo, descricao, quantidade):
-        with open(self.__configurations.file_output, mode='a', newline='') as file:
-            writer = csv.writer(file, delimiter=';')
-            writer.writerow([id, codigo, descricao, quantidade])
 
-    def update_transaction(self, id, new_codigo, new_descricao, new_quantidade):
+    def read_log_csv(self):
+        self.logs = pd.read_csv(self.__configurations.log_output)
+        return self.logs
+    
+
+    def write_file_csv(self):
+        columns = ['id', 'codigo', 'descricao', 'quantidade']
+        transactions = pd.DataFrame(columns=columns)
+
+        transactions.to_csv(self.__configurations.file_output, index=False)
+
+
+    def write_log_csv(self):
+        columns = ['Data', 'Ação', 'Item Alterado']
+        logs = pd.DataFrame(columns=columns)
+
+        logs.to_csv(self.__configurations.log_output, index=False)
+
+
+    def update_transaction(self, id, codigo, descricao, quantidade):
         transactions = self.read_file_csv()
-        found = False
-        for transaction in transactions:
-            if transaction['id'] == str(id):
-                transaction['codigo'] = new_codigo
-                transaction['descricao'] = new_descricao
-                transaction['quantidade'] = new_quantidade
-                found = True
-                break
-        
-        if not found:
+        logs = self.read_log_csv()
+
+        data = {'id': [id],
+                'codigo': [codigo],
+                'descricao': [descricao],
+                'quantidade': [quantidade]
+                }
+
+        new_line = pd.DataFrame(data)
+
+        if int(id) not in transactions['id'].values:
             print("ID inválido. Não foi possível encontrar a transação com o ID fornecido.")
-            return
 
-        with open(self.__configurations.file_output, mode='w', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['id', 'codigo', 'descricao', 'quantidade'], delimiter=';')
-            writer.writeheader()
-            for transaction in transactions:
-                writer.writerow(transaction)
+        else:
+            transactions.loc[transactions['id'] == id, 'codigo'] = codigo
+            transactions.loc[transactions['id'] == id, 'descricao'] = descricao
+            transactions.loc[transactions['id'] == id, 'quantidade'] = quantidade
 
-    def add_transaction(self, id, add_codigo, add_descricao, add_quantidade):
-        with open (self.__configurations.file_output, mode='a', newline='') as file:
-            writer = csv.writer(file, delimiter=';')
-            writer.writerow([id, add_codigo, add_descricao, add_quantidade])
-    
-    def remove_transaction(self, id):
+            transactions.to_csv(self.__configurations.file_output, index=False)
+
+            # Gerando o log da ação
+            logs_data = {'Data': [date.today()], 
+                         'Ação': ['Atualização dos dados'],
+                         'Item Alterado': [id]}
+            
+            new_line_logs = pd.DataFrame(logs_data)
+            logs = pd.concat([logs, new_line_logs], ignore_index=True)
+            logs.to_csv(self.__configurations.log_output, index=False)
+
+    def add_transaction(self, id, codigo, descricao, quantidade):
         transactions = self.read_file_csv()
-        updated_transactions = [transaction for transaction in transactions if transaction['id'] != str(id)]
-        if len(updated_transactions) == len(transactions):
-            print("ID inválido. Não foi possível encontrar o ID fornecido.")
-            return
+        logs = self.read_log_csv()
 
-        with open(self.__configurations.file_output, mode='w', newline='') as file:
-            writer = csv.writer(file, delimiter=';')
-            writer.writerow(['id', 'codigo', 'descricao', 'quantidade'])  # cabecalho
-            for transaction in updated_transactions:
-                writer.writerow([transaction['id'], transaction['codigo'], transaction['descricao'], transaction['quantidade']])
+        data = {'id': [id],
+        'codigo': [codigo],
+        'descricao': [descricao],
+        'quantidade': [quantidade]}
+    
+        new_line = pd.DataFrame(data)
+        
+        transactions = pd.concat([transactions, new_line], ignore_index=True)
 
-        print(f"Removendo o produto com ID {id} com sucesso.")
+        transactions.to_csv(self.__configurations.file_output, index=False)
+        
+        logs_data = {'Data': [date.today()], 
+                         'Ação': ['Adição de um novo item'],
+                         'Item Alterado': [id]}
+            
+        new_line_logs = pd.DataFrame(logs_data)
+        logs = pd.concat([logs, new_line_logs], ignore_index=True)
+        logs.to_csv(self.__configurations.log_output, index=False)
+
+    def remove_transaction(self, id):
+        logs = self.read_log_csv()
+        transactions = self.read_file_csv()
+        
+        if id not in transactions['id'].values:
+            print("ID inválido. Não foi possível encontrar a transação com o ID fornecido.")
+
+        else:
+            ind = transactions[transactions['id'] == id].index
+            transactions = transactions.drop(index=ind)
+            transactions.to_csv(self.__configurations.file_output, index=False)
+
+            logs_data = {'Data': [date.today()], 
+                         'Ação': ['Remoção de item inteiro'],
+                         'Item Alterado': [id]}
+            
+            new_line_logs = pd.DataFrame(logs_data)
+            logs = pd.concat([logs, new_line_logs], ignore_index=True)
+            logs.to_csv(self.__configurations.log_output, index=False)
+
+    def show_critical_positions(self):
+        transactions = self.read_file_csv()
+        critical = transactions[transactions['quantidade'] <= 7]
+
+        print(critical)
+
+
+

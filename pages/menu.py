@@ -5,7 +5,7 @@ class Menu:
         self.__operation = operation
     
     def show_menu(self):
-        print('Digite 1 para ver o estoque: ')
+        print('\n\nDigite 1 para ver o estoque: ')
         print('Digite 2 para ver o log de Movimentação no estoque')
         print('Digite 3 para alterar um valor de um dos produtos no estoque') 
         print('Digite 4 para adicionar um produto no estoque')
