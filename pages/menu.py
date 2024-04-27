@@ -5,12 +5,15 @@ class Menu:
         self.__operation = operation
     
     def show_menu(self):
-        print('\n\nDigite 1 para ver o estoque: ')
-        print('Digite 2 para ver o log de Movimentação no estoque')
-        print('Digite 3 para alterar um valor de um dos produtos no estoque') 
-        print('Digite 4 para adicionar um produto no estoque')
-        print('Digite 5 para remover um produto no estoque')
-        print('Digite 6 para sair')
+        print('\n\n=== Menu ===')
+        print('1. Visualizar o estoque')
+        print('2. Visualizar o log de movimentação no estoque')
+        print('3. Alterar o valor de um dos produtos no estoque') 
+        print('4. Adicionar um produto no estoque')
+        print('5. Remover um produto do estoque')
+        print('6. Adicionar uma quantidade para um produto no estoque')
+        print('7. Remover uma quantidade de um produto no estoque')
+        print('8. Sair')
 
     def get_operation(self):
         self.__operation = int(input('selecione uma operação: '))
